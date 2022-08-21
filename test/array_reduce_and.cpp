@@ -42,8 +42,7 @@ static bool test3_hxor()
 }
 #endif
 
-#if 0
-static bool test2()
+static bool test4_hand()
 {
     static const std::size_t SIZE = 8*5 + 5;
 
@@ -53,14 +52,14 @@ static bool test2()
         array[i] = ~((1ul << (i+1)) - 1);
     }
 
-    uint64_t res = simd::array_reduce_and/*<uint64_t>*/(array);
+    uint64_t res = simd::array_reduce<simd::op::Hand<simd::U64x8>, uint64_t >(array, ~0ul);
 
     ASSERT(res == ~((1ul << SIZE) - 1),
         "fail %lx vs %lx", res, ~((1ul << SIZE) - 1));
 
     return true;
 }
-#endif
+
 int main()
 {
     ASSERT(test1_hand(), "test1_hand failed");
@@ -68,6 +67,7 @@ int main()
 #if !defined(__x86_64__)
     ASSERT(test3_hxor(), "test3_hxor failed");
 #endif
+    ASSERT(test4_hand(), "test4_hand failed");
 
     return 0;
 }

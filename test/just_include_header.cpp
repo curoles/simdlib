@@ -1,6 +1,6 @@
 #include "simdlib/simdlib.h"
 
-#include "test_assert.h"
+//#include "test_assert.h"
 
 int main()
 {

@@ -4,6 +4,9 @@
  */
 #pragma once
 
+#include <type_traits>
+
 #include "simdlib/elemtypes.h"
 #include "simdlib/simd_vector.h"
 #include "simdlib/op.h"
+#include "simdlib/container.h"
