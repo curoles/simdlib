@@ -52,7 +52,8 @@ static bool test4_hand()
         array[i] = ~((1ul << (i+1)) - 1);
     }
 
-    uint64_t res = simd::array_reduce<simd::op::Hand<simd::U64x8>, uint64_t >(array, ~0ul);
+    //uint64_t res = simd::array_reduce<simd::op::Hand<simd::U64x8>, uint64_t >(array, ~0ul);
+    uint64_t res = simd::array_reduce_and<uint64_t>(array, ~0ul);
 
     ASSERT(res == ~((1ul << SIZE) - 1),
         "fail %lx vs %lx", res, ~((1ul << SIZE) - 1));
@@ -60,7 +61,34 @@ static bool test4_hand()
     return true;
 }
 
-int main()
+static void __attribute__((noinline)) test5_hand(bool use_simd, std::size_t times)
+{
+    static const std::size_t SIZE = 1024*10;
+    std::array<uint64_t, SIZE> array;
+    volatile uint64_t res = ~0ul;
+
+    if (use_simd) {
+        for (std::size_t i = 0; i < times; ++i) {
+            res = res & simd::array_reduce_and<uint64_t>(array, ~0ul);
+        }
+    }
+    else {
+        for (std::size_t i = 0; i < times; ++i) {
+            for (std::size_t j = 0; j < SIZE; ++j) {
+                res = res & array[j];
+            }
+        }
+    }
+}
+
+static void __attribute__((noinline)) do_measure1(std::size_t times)
+{
+    auto t1 = test::benchmark(std::function{test5_hand}, true, times);
+    auto t2 = test::benchmark(std::function{test5_hand}, false, times);
+    printf("VEC: %lu SCALAR: %lu times: %lu\n", t1.count(), t2.count(), times);
+}
+
+int main(int argc, char** argv)
 {
     ASSERT(test1_hand(), "test1_hand failed");
     ASSERT(test2_hor(), "test2_hor failed");
@@ -68,6 +96,12 @@ int main()
     ASSERT(test3_hxor(), "test3_hxor failed");
 #endif
     ASSERT(test4_hand(), "test4_hand failed");
+
+    std::size_t times{10};
+    if (argc > 1) {
+        times = strtol(argv[1], nullptr, 10);
+    }
+    do_measure1(times);
 
     return 0;
 }

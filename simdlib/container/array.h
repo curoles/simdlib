@@ -25,3 +25,4 @@ struct array_info
 } // namespace
 
 #include "array/array_reduce.h"
+#include "array/array_reduce_and.h"

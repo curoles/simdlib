@@ -11,6 +11,8 @@
 #include <limits>
 #include <type_traits>
 #include <array>
+#include <chrono>
+#include <functional>
 
 #define STRFY(x) #x
 
@@ -39,6 +41,18 @@ almost_equal(T x, T y, int ulp)
     return std::fabs(x-y) <= std::numeric_limits<T>::epsilon() * std::fabs(x+y) * ulp
         // unless the result is subnormal
         || std::fabs(x-y) < std::numeric_limits<T>::min();
+}
+
+template<typename... Args>
+std::chrono::milliseconds benchmark(std::function<void(Args...)> fun, Args... args)
+{
+    auto startTime = std::chrono::system_clock::now();
+    fun(args...);
+    auto endTime = std::chrono::system_clock::now();
+
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+
+    return elapsed;
 }
 
 } // end namespace test
