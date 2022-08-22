@@ -85,11 +85,41 @@ static void __attribute__((noinline)) test5_hand(bool use_simd, std::size_t time
     }
 }
 
+static void __attribute__((noinline)) test6_hand(bool use_simd, std::size_t times)
+{
+    static const std::size_t SIZE = 1024*1024;
+
+    std::vector<uint64_t, simd::aligned_allocator<uint64_t> > array;
+    array.resize(SIZE, ~0ul);
+
+    volatile uint64_t res = ~0ul;
+
+    if (use_simd) {
+        for (std::size_t i = 0; i < times; ++i) {
+            res = res & simd::array_reduce_and<uint64_t>(array, ~0ul);
+        }
+    }
+    else {
+        for (std::size_t i = 0; i < times; ++i) {
+            for (std::size_t j = 0; j < SIZE; ++j) {
+                res = res & array[j];
+            }
+        }
+    }
+}
+
 static void __attribute__((noinline)) do_measure1(std::size_t times)
 {
     auto t1 = test::benchmark(std::function{test5_hand}, true, times);
     auto t2 = test::benchmark(std::function{test5_hand}, false, times);
-    printf("VEC: %lu SCALAR: %lu times: %lu\n", t1.count(), t2.count(), times);
+    printf("std::array VEC: %lu SCALAR: %lu times: %lu\n", t1.count(), t2.count(), times);
+}
+
+static void __attribute__((noinline)) do_measure2(std::size_t times)
+{
+    auto t1 = test::benchmark(std::function{test6_hand}, true, times);
+    auto t2 = test::benchmark(std::function{test6_hand}, false, times);
+    printf("std::vector VEC: %lu SCALAR: %lu times: %lu\n", t1.count(), t2.count(), times);
 }
 
 int main(int argc, char** argv)
@@ -101,11 +131,12 @@ int main(int argc, char** argv)
 #endif
     ASSERT(test4_hand(), "test4_hand failed");
 
-    std::size_t times{10};
+    std::size_t times{1};
     if (argc > 1) {
         times = strtol(argv[1], nullptr, 10);
     }
-    do_measure1(times);
+    do_measure1(times * 100);
+    do_measure2(times);
 
     return 0;
 }

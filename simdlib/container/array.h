@@ -26,5 +26,6 @@ struct array_info
 
 } // namespace
 
+#include "array/aligned_allocator.h"
 #include "array/array_reduce.h"
 #include "array/array_reduce_and.h"
