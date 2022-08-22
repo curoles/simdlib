@@ -13,14 +13,14 @@ T array_reduce(const T* array, std::size_t nr_elem, T init)
     using VT = decltype(ai)::VT;
 
     for (std::size_t i = 0; (i+1) < ai.nr_simd; i += 2) {
-        const VT* v1 = ai.at(array,i);
-        const VT* v2 = ai.at(array,i+1);
-        acum = Op::d(acum, Op::d(Op::d(*v1), Op::d(*v2)));
+        VT v1 = ai.load(array,i);
+        VT v2 = ai.load(array,i+1);
+        acum = Op::d(acum, Op::d(Op::d(v1), Op::d(v2)));
     }
 
     if (ai.nr_simd % 2) {
-        const VT* v = ai.at(array, ai.nr_simd-1);
-        acum = Op::d(acum, Op::d(*v));
+        VT v = ai.load(array, ai.nr_simd-1);
+        acum = Op::d(acum, Op::d(v));
     }
     //FIXME TODO rewrite with mask
     for (std::size_t i = ai.nr_simd*ai.LEN; i < ai.nr_elem; ++i) {

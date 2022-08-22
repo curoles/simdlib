@@ -1,5 +1,7 @@
 #pragma once
 
+#include "op/load.h"
+
 #if defined(__tachyum__)
 #include <vxintrin.hpp>
 #include "op/arch/tachyum/hand.h"

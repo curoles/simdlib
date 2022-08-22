@@ -20,6 +20,8 @@ struct array_info
 
     VT* at(T* array, std::size_t n) { return (VT*)&array[n*LEN]; }
     const VT* at(const T* array, std::size_t n) { return (const VT*)&array[n*LEN]; }
+
+    inline VT load(const T* array, std::size_t n) { return simd::op::load(at(array, n)); }
 };
 
 } // namespace

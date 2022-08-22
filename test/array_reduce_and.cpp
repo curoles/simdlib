@@ -46,6 +46,7 @@ static bool test4_hand()
 {
     static const std::size_t SIZE = 8*5 + 5;
 
+    alignas(simd::arch_default_vsz_bytes)
     std::array<uint64_t, SIZE> array;
 
     for (std::size_t i = 0; i < SIZE; ++i) {
@@ -64,7 +65,10 @@ static bool test4_hand()
 static void __attribute__((noinline)) test5_hand(bool use_simd, std::size_t times)
 {
     static const std::size_t SIZE = 1024*10;
+
+    alignas(simd::arch_default_vsz_bytes)
     std::array<uint64_t, SIZE> array;
+
     volatile uint64_t res = ~0ul;
 
     if (use_simd) {
