@@ -4,6 +4,8 @@
  */
 #pragma once
 
+#include <functional>
+
 #include "simdlib/elemtypes.h"
 
 namespace simd {
@@ -99,5 +101,19 @@ constexpr std::size_t len(T&)
 {
     return simd::len<T>();
 }
+
+template<typename VT/*, typename... Args*/>
+using foreach_fun_t = std::function<void(typename simd::value_type<VT>::type, std::size_t i/*, Args...*/)>;
+
+template<typename VT/*, typename... Args*/>
+void foreach(VT v, foreach_fun_t<VT/*,Args...*/> fun/*, Args... args*/)
+{
+    for (std::size_t i = 0; i < simd::len(v); ++i) {
+        fun(v[i], i/*, args...*/);
+    }
+}
+
+template<typename VT> concept IsIntegral = std::is_integral_v<typename simd::value_type<VT>::type>;
+template<typename VT> concept IsFloatingPoint = std::is_floating_point_v<typename simd::value_type<VT>::type>;
 
 } // end namespace simd

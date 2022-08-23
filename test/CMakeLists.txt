@@ -1,5 +1,5 @@
 if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
-    set(TEST_CC_FLAGS -static -O3 -mavx512f)
+    set(TEST_CC_FLAGS -static -O3 -mavx512f) #-mavx512bf16
 else()
     set(TEST_CC_FLAGS -static -O3)
 endif()
@@ -7,7 +7,8 @@ endif()
 set(tests
     just_include_header
     array_reduce_and
-    #array_sum array_or array_xor
+    array_reduce_add
+    #array_or array_xor
     #array_find_max array_find_min array_find_first
     #array_mul_pair_sum array_product
     #arrays_and #or xor
