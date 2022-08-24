@@ -22,10 +22,13 @@ struct array_info
     const VT* at(const T* array, std::size_t n) { return (const VT*)&array[n*LEN]; }
 
     inline VT load(const T* array, std::size_t n) { return simd::op::load(at(array, n)); }
+
+    inline void store(T* array, std::size_t n, VT v) { simd::op::store(at(array, n), v); }
 };
 
 } // namespace
 
 #include "array/aligned_allocator.h"
+#include "array/array_fill.h"
 #include "array/array_reduce.h"
 #include "array/array_reduce_and.h"

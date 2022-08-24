@@ -1,3 +1,5 @@
+#pragma once
+
 namespace simd {
 
 /// Binary operation between elements of 2 arrays.
@@ -30,7 +32,7 @@ void arrays_bop(T* dst_array, const T* array1, const T* array2, std::size_t nr_e
 
 /// Binary operation between elements of 2 arrays.
 ///
-/// span can be C array or STL container.
+/// span can be C array or contiguous STL container.
 ///
 template<typename Op, typename T, std::size_t VSZ = simd::arch_default_vsz_bits>
 void arrays_bop(std::span<T> dst_array, std::span<const T> array1, std::span<const T> array2)

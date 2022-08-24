@@ -56,6 +56,19 @@ static bool test4_hmul()
     return true;
 }
 
+static bool test5_fill()
+{
+    simd::std_array<uint64_t, 8+2> array{1,2,3,4,5,6,7,8,9,10};
+
+    uint64_t val{777ul};
+    simd::array_fill<decltype(array)::value_type>(array, val);
+
+    for (auto v : array) {
+        ASSERT(v == val, "%lu vs expected %lu", v, val);
+    }
+
+    return true;
+}
 
 int main(/*int argc, char** argv*/)
 {
@@ -63,6 +76,7 @@ int main(/*int argc, char** argv*/)
     ASSERT(test2_hadd(), "test2_hadd failed");
     ASSERT(test3_hmul(), "test3_hmul failed");
     ASSERT(test4_hmul(), "test4_hmul failed");
+    ASSERT(test5_fill(), "test5_fill failed");
 
     return 0;
 }
