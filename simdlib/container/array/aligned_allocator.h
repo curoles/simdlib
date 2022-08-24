@@ -146,4 +146,11 @@ class aligned_allocator
 		aligned_allocator& operator=(const aligned_allocator&);
 };
 
+
+template<typename T, typename Allocator = simd::aligned_allocator<T>>
+using std_vector = ::std::vector<T, Allocator>;
+
+template<typename T, std::size_t N>
+using std_array alignas(simd::arch_default_vsz_bytes) =  ::std::array<T, N>;
+
 } // namespace simd

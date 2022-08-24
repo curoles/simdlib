@@ -66,8 +66,9 @@ static void __attribute__((noinline)) test5_hand(bool use_simd, std::size_t time
 {
     static const std::size_t SIZE = 1024*10;
 
-    alignas(simd::arch_default_vsz_bytes)
-    std::array<uint64_t, SIZE> array;
+    //alignas(simd::arch_default_vsz_bytes)
+    //std::array<uint64_t, SIZE> array;
+    simd::std_array<uint64_t, SIZE> array;
 
     volatile uint64_t res = ~0ul;
 
@@ -89,7 +90,8 @@ static void __attribute__((noinline)) test6_hand(bool use_simd, std::size_t time
 {
     static const std::size_t SIZE = 1024*1024;
 
-    std::vector<uint64_t, simd::aligned_allocator<uint64_t> > array;
+    //std::vector<uint64_t, simd::aligned_allocator<uint64_t> > array;
+    simd::std_vector<uint64_t> array;
     array.resize(SIZE, ~0ul);
 
     volatile uint64_t res = ~0ul;
