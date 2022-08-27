@@ -55,4 +55,15 @@ std::chrono::milliseconds benchmark(std::function<void(Args...)> fun, Args... ar
     return elapsed;
 }
 
+#if defined(__x86_64__)
+bool check_cpu_simd_support() {
+    #ifdef __AVX512F__
+    if (!__builtin_cpu_supports("avx512f")) return false;
+    #endif
+    return true;
+}
+#else
+bool check_cpu_simd_support() {return true;}
+#endif
+
 } // end namespace test

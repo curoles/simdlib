@@ -1,9 +1,11 @@
 #include "simdlib/simdlib.h"
 
-//#include "test_assert.h"
+#include "test_assert.h"
 
 int main()
 {
+    ASSERT(test::check_cpu_simd_support(), "CPU does not have required SIMD support");
+
     simd::make<float,8>::type my_simd_vector;
     static_assert(std::is_same_v<simd::F32x8, decltype(my_simd_vector)>);
 

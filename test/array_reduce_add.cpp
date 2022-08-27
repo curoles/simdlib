@@ -105,6 +105,8 @@ static bool test7_fill()
 
 int main(/*int argc, char** argv*/)
 {
+    ASSERT(test::check_cpu_simd_support(), "CPU does not have required SIMD support");
+
     ASSERT(test1_hadd(), "test1_hadd failed");
     ASSERT(test2_hadd(), "test2_hadd failed");
     ASSERT(test3_hmul(), "test3_hmul failed");

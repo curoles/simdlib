@@ -126,6 +126,8 @@ static void __attribute__((noinline)) do_measure2(std::size_t times)
 
 int main(int argc, char** argv)
 {
+    ASSERT(test::check_cpu_simd_support(), "CPU does not have required SIMD support");
+
     ASSERT(test1_hand(), "test1_hand failed");
     ASSERT(test2_hor(), "test2_hor failed");
 #if !defined(__x86_64__)
