@@ -56,7 +56,40 @@ static bool test4_hmul()
     return true;
 }
 
-static bool test5_fill()
+static bool test5_load()
+{
+    simd::U64x8 v{9, 10, 11, 12, 13, 14, 15, 16};
+    uint64_t a[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+
+    v = simd::op::load<simd::U64x8>(a, simd::PMask<simd::U64x8>::make_set_first_n(6));
+ 
+    for (uint8_t i = 0; i < 6; ++i) {
+        //printf("load [%i] %lu vs %lu\n", i, v[i], a[i]);
+        ASSERT(v[i] == a[i], "load [%i] fail %lu vs %lu", i, v[i], a[i]);
+    }
+
+    //ASSERT(v[6] == 15, "load fail [%i] %lu vs %lu", 6, v[6], 15ul);
+    //ASSERT(v[7] == 16, "load fail [%i] %lu vs %lu", 7, v[7], 16ul);
+
+    return true;
+}
+
+static bool test6_store()
+{
+    simd::U64x8 v{9, 10, 11, 12, 13, 14, 15, 16};
+    uint64_t a[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+
+    simd::op::store(a, v, simd::PMask<simd::U64x8>::make_set_first_n(6));
+ 
+    for (uint8_t i = 0; i < 6; ++i) {
+        //printf("store [%i] %lu vs %lu\n", i, v[i], a[i]);
+        ASSERT(v[i] == a[i], "store [%i] fail %lu vs %lu", i, v[i], a[i]);
+    }
+
+    return true;
+}
+
+static bool test7_fill()
 {
     simd::std_array<uint64_t, 8+2> array{1,2,3,4,5,6,7,8,9,10};
 
@@ -76,7 +109,9 @@ int main(/*int argc, char** argv*/)
     ASSERT(test2_hadd(), "test2_hadd failed");
     ASSERT(test3_hmul(), "test3_hmul failed");
     ASSERT(test4_hmul(), "test4_hmul failed");
-    ASSERT(test5_fill(), "test5_fill failed");
+    ASSERT(test5_load(), "test5_load failed");
+    ASSERT(test6_store(), "test6_store failed");
+    ASSERT(test7_fill(), "test7_fill failed");
 
     return 0;
 }

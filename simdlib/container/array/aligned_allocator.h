@@ -12,7 +12,7 @@ namespace simd {
  * std::vector<uint64_t, aligned_allocator<uint64_t, 512/8> > v;
  *
  */
-template <typename T, std::size_t Alignment=simd::arch_default_vsz_bytes>
+template <typename T, std::size_t Alignment=simd::arch_max_vsz_bytes>
 class aligned_allocator
 {
 	public:
@@ -151,6 +151,6 @@ template<typename T, typename Allocator = simd::aligned_allocator<T>>
 using std_vector = ::std::vector<T, Allocator>;
 
 template<typename T, std::size_t N>
-using std_array alignas(simd::arch_default_vsz_bytes) =  ::std::array<T, N>;
+using std_array alignas(simd::arch_max_vsz_bytes) =  ::std::array<T, N>;
 
 } // namespace simd
