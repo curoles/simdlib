@@ -59,7 +59,7 @@ static bool test4_hmul()
 static bool test5_load()
 {
     simd::U64x8 v{9, 10, 11, 12, 13, 14, 15, 16};
-    uint64_t a[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    alignas(simd::arch_max_vsz_bytes) uint64_t a[8] = {1, 2, 3, 4, 5, 6, 7, 8};
 
     v = simd::op::load<simd::U64x8>(a, simd::PMask<simd::U64x8>::make_set_first_n(6));
  
@@ -77,7 +77,7 @@ static bool test5_load()
 static bool test6_store()
 {
     simd::U64x8 v{9, 10, 11, 12, 13, 14, 15, 16};
-    uint64_t a[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    alignas(simd::arch_max_vsz_bytes) uint64_t a[8] = {1, 2, 3, 4, 5, 6, 7, 8};
 
     simd::op::store(a, v, simd::PMask<simd::U64x8>::make_set_first_n(6));
  

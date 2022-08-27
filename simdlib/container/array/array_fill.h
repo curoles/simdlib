@@ -19,15 +19,15 @@ void array_fill(T* array, std::size_t nr_elem, T val)
         ai.store(array, i, filler);
     }
 
-#if 1
+#if 0
     #pragma GCC unroll 8
     #pragma GCC ivdep
     for (std::size_t i = ai.nr_simd*ai.LEN; i < ai.nr_elem; ++i) {
         array[i] = val;
     }
 #else
-    if (a.nr_tail_elem) {
-        //tvx::pmask_t mask = tvx::_pmask(a.nr_tail_elem * sizeof(T));
+    if (ai.nr_tail_elem) {
+        auto mask = decltype(ai)::MASK::make_set_first_n(ai.nr_tail_elem);
         ai.store(array, ai.nr_simd, filler, mask);
     }
 #endif

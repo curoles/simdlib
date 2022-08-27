@@ -11,6 +11,7 @@ struct array_info
     static constexpr std::size_t LEN = VSZ / sizeof(T);
 
     using VT = simd::make<T,LEN>::type;
+    using MASK = simd::PMask<VT,VSZ_BITS>;
 
     const std::size_t nr_elem;
     const std::size_t nr_bytes = nr_elem * sizeof(T);
@@ -24,6 +25,10 @@ struct array_info
     inline VT load(const T* array, std::size_t n) { return simd::op::load(at(array, n)); }
 
     inline void store(T* array, std::size_t n, VT v) { simd::op::store(at(array, n), v); }
+
+    inline void store(T* array, std::size_t n, VT v, MASK mask) {
+        simd::op::store((T*)at(array, n), v, mask);
+    }
 };
 
 } // namespace
