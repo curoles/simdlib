@@ -26,6 +26,10 @@ struct array_info
 
     inline void store(T* array, std::size_t n, VT v) { simd::op::store(at(array, n), v); }
 
+    inline VT load(const T* array, std::size_t n, MASK mask) {
+        return simd::op::load((T*)at(array, n), mask);
+    }
+
     inline void store(T* array, std::size_t n, VT v, MASK mask) {
         simd::op::store((T*)at(array, n), v, mask);
     }
@@ -37,3 +41,5 @@ struct array_info
 #include "array/array_fill.h"
 #include "array/array_reduce.h"
 #include "array/array_reduce_and.h"
+#include "array/arrays_bop.h"
+#include "array/arrays_add.h"

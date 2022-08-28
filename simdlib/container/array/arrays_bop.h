@@ -16,18 +16,15 @@ void arrays_bop(T* dst_array, const T* array1, const T* array2, std::size_t nr_e
     for (std::size_t i = 0; i < ai.nr_simd; ++i) {
         VT v1 = ai.load(array1, i);
         VT v2 = ai.load(array2, i);
-        ai.store(dst_array, i, Op(v1, v2));
+        ai.store(dst_array, i, Op::d(v1, v2));
     }
 
-    if (a.nr_tail_elem) {
-        //tvx::pmask_t mask = tvx::_pmask(a.nr_tail_elem * sizeof(T));
+    if (ai.nr_tail_elem) {
+        auto mask = decltype(ai)::MASK::make_set_first_n(ai.nr_tail_elem);
         VT v1 = ai.load(array1, ai.nr_simd, mask);
         VT v2 = ai.load(array2, ai.nr_simd, mask);
-        ai.store(dst_array, ai.nr_simd, Op(v1, v2), mask);
+        ai.store(dst_array, ai.nr_simd, Op::d(v1, v2), mask);
     }
-
-
-    return acum;
 }
 
 /// Binary operation between elements of 2 arrays.

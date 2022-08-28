@@ -58,7 +58,10 @@ std::chrono::milliseconds benchmark(std::function<void(Args...)> fun, Args... ar
 #if defined(__x86_64__)
 bool check_cpu_simd_support() {
     #ifdef __AVX512F__
-    if (!__builtin_cpu_supports("avx512f")) return false;
+    if (!__builtin_cpu_supports("avx512f")) { fprintf(stderr, "CPU does not support avx512f\n"); return false; }
+    #endif
+    #ifdef __AVX512DQ__
+    if (!__builtin_cpu_supports("avx512dq")) { fprintf(stderr, "CPU does not support avx512dq\n"); return false; }
     #endif
     return true;
 }

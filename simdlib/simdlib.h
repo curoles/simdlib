@@ -5,6 +5,7 @@
 #pragma once
 
 #include <type_traits>
+#include <cassert>
 
 #include "simdlib/elemtypes.h"
 #include "simdlib/simd_vector.h"

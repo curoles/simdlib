@@ -103,6 +103,44 @@ static bool test7_fill()
     return true;
 }
 
+static bool test8_hadd()
+{
+    static const std::size_t SIZE = 8*5 + 5;
+
+    simd::std_array<uint64_t, SIZE> array;
+
+    uint64_t sum{0};
+    for (std::size_t i = 0; i < SIZE; ++i) {
+        array[i] = i;
+        sum += array[i];
+    }
+
+    uint64_t res = simd::array_reduce_add<uint64_t>(array, 0ul);
+
+    ASSERT(res == sum, "fail %lx vs %lx", res, sum);
+
+    return true;
+}
+
+static bool test9_hmul()
+{
+    static const std::size_t SIZE = 8*5 + 5;
+
+    simd::std_array<uint64_t, SIZE> array;
+
+    uint64_t product{1};
+    for (std::size_t i = 0; i < SIZE; ++i) {
+        array[i] = i;
+        product *= array[i];
+    }
+
+    uint64_t res = simd::array_reduce_mul<uint64_t>(array, 1ul);
+
+    ASSERT(res == product, "fail %lx vs %lx", res, product);
+
+    return true;
+}
+
 int main(/*int argc, char** argv*/)
 {
     ASSERT(test::check_cpu_simd_support(), "CPU does not have required SIMD support");
@@ -114,6 +152,8 @@ int main(/*int argc, char** argv*/)
     ASSERT(test5_load(), "test5_load failed");
     ASSERT(test6_store(), "test6_store failed");
     ASSERT(test7_fill(), "test7_fill failed");
+    ASSERT(test8_hadd(), "test8_hadd failed");
+    ASSERT(test9_hmul(), "test9_hmul failed");
 
     return 0;
 }
