@@ -10,6 +10,7 @@ namespace simd { constexpr std::size_t arch_max_vsz_bits = 512; }
 #include "op/arch/tachyum/load.h"
 #include "op/arch/tachyum/hand.h"
 #include "op/arch/tachyum/hadd.h"
+#include "op/arch/tachyum/hmax.h"
 #include "op/arch/tachyum/select.h"
 #include "op/arch/tachyum/add.h"
 #include "op/arch/tachyum/eq.h"
@@ -21,6 +22,7 @@ namespace simd { constexpr std::size_t arch_max_vsz_bits = 512; }
 #include "op/arch/x86_64/load.h"
 #include "op/arch/x86_64/hand.h"
 #include "op/arch/x86_64/hadd.h"
+#include "op/arch/x86_64/hmax.h"
 #include "op/arch/x86_64/add.h"
 #include "op/arch/x86_64/eq.h"
 #else

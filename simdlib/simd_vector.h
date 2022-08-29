@@ -114,6 +114,8 @@ void foreach(VT v, foreach_fun_t<VT/*,Args...*/> fun/*, Args... args*/)
 }
 
 template<typename VT> concept IsIntegral = std::is_integral_v<typename simd::value_type<VT>::type>;
+template<typename VT> concept IsSignedIntegral = std::is_integral_v<typename simd::value_type<VT>::type>
+                                                && std::is_signed_v<typename simd::value_type<VT>::type>;
 template<typename VT> concept IsFloatingPoint = std::is_floating_point_v<typename simd::value_type<VT>::type>;
 
 } // end namespace simd

@@ -12,6 +12,8 @@ public:
 
     ArchMask mask_;
 
+    //PMask(ArchMask mask):mask_(mask){}
+
     operator ArchMask() const { return mask_; }
 
     ArchMask operator()() const { return mask_; }
