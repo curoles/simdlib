@@ -118,13 +118,16 @@ static void __attribute__((noinline)) test_measure(bool use_simd, std::size_t ti
     volatile uint64_t maxval{0};
 
     if (use_simd) {
+        #pragma GCC unroll 1
         for (std::size_t i = 0; i < times; ++i) {
             maxval = simd::array_find_max<uint64_t>(array);
             ASSERT(maxval == (SIZE - 1), "fail %lu vs %lu", maxval, SIZE-1);
         }
     }
     else {
+        #pragma GCC unroll 1
         for (std::size_t i = 0; i < times; ++i) {
+            #pragma GCC unroll 1
             for (std::size_t j = 0; j < SIZE; ++j) {
                 if (maxval < array[j]) {maxval = array[j];}
             }
