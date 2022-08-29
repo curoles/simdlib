@@ -1,65 +1,47 @@
 #pragma once
 
+namespace simd::op {
+
+template<typename VT>
+struct Hmax {
+    using T = simd::value_type<VT>::type;
+    Hmax() = delete;
+    static auto d(VT v) {return simd::op::hmax(v);}
+    static auto d(T a, T b) {return std::max(a, b);}
+};
+
+template<typename VT>
+struct Hmin {
+    using T = simd::value_type<VT>::type;
+    Hmin() = delete;
+    static auto d(VT v) {return simd::op::hmin(v);}
+    static auto d(T a, T b) {return std::min(a, b);}
+};
+
+} // namespace simd::op
+
 namespace simd {
 
-/// Find element with maximum value.
+/// In array find element with maximum value.
 ///
 ///
 template<typename T, std::size_t VSZ = simd::arch_default_vsz_bits>
-T array_find_max(const T* array, std::size_t nr_elem)
+auto array_find_max(std::span<const T> array)
 {
-    auto ai = array_info<T,VSZ>(nr_elem);
-    using VT = decltype(ai)::VT;
-
-    T maxel {array[0]};
-
-    for (std::size_t i = 0; i < ai.nr_simd; ++i) {
-        VT v = ai.load(array,i);
-        maxel = std::max(maxel, simd::op::hmax(v));
-    }
-
-    //FIXME TODO once hsum intrinsic has mask, rewrite with hmax+mask
-    for (std::size_t i = ai.nr_simd*ai.LEN; i < ai.nr_elem; ++i) {
-        maxel = std::max(maxel, array[i]);
-    }
-
-    return maxel;
+    using VT = array_info<T,VSZ>::VT;
+    using Op = simd::op::Hmax<VT>;
+    return simd::array_reduce<Op,T,VSZ>(array, array[0]);
 }
 
-template<typename T, std::size_t VSZ = simd::arch_default_vsz_bits>
-T array_find_max(std::span<const T> array)
-{
-    return simd::array_find_max<T,VSZ>(array.data(), array.size());
-}
-
-/// Find element with minimum value.
+/// In array find element with minimum value.
 ///
 ///
 template<typename T, std::size_t VSZ = simd::arch_default_vsz_bits>
-T array_find_min(const T* array, std::size_t nr_elem)
+auto array_find_min(std::span<const T> array)
 {
-    auto ai = array_info<T,VSZ>(nr_elem);
-    using VT = decltype(ai)::VT;
-
-    T minel {array[0]};
-
-    for (std::size_t i = 0; i < ai.nr_simd; ++i) {
-        VT v = ai.load(array,i);
-        minel = std::min(minel, simd::op::hmin(v));
-    }
-
-    //FIXME TODO once hsum intrinsic has mask, rewrite with hmin+mask
-    for (std::size_t i = ai.nr_simd*ai.LEN; i < ai.nr_elem; ++i) {
-        minel = std::min(minel, array[i]);
-    }
-
-    return minel;
-}
-
-template<typename T, std::size_t VSZ = simd::arch_default_vsz_bits>
-T array_find_min(std::span<const T> array)
-{
-    return simd::array_find_min<T,VSZ>(array.data(), array.size());
+    using VT = array_info<T,VSZ>::VT;
+    using Op = simd::op::Hmin<VT>;
+    return simd::array_reduce<Op,T,VSZ>(array, array[0]);
 }
 
 } // namespace simd
