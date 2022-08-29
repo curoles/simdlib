@@ -41,5 +41,6 @@ struct array_info
 #include "array/array_fill.h"
 #include "array/array_reduce.h"
 #include "array/array_reduce_and.h"
+#include "array/array_find_first.h"
 #include "array/arrays_bop.h"
 #include "array/arrays_add.h"

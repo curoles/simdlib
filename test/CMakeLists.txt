@@ -8,6 +8,7 @@ set(tests
     just_include_header
     array_reduce_and
     array_reduce_add
+    array_find_first
     arrays_add
     #array_or array_xor
     #array_find_max array_find_min array_find_first
