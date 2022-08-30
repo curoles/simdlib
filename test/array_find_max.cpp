@@ -105,6 +105,7 @@ static bool test6_find_min()
     return true;
 }
 
+__attribute__((optimize("no-tree-vectorize")))
 static void __attribute__((noinline)) test_measure(bool use_simd, std::size_t times)
 {
     static const std::size_t SIZE = 1024*1024;
@@ -138,6 +139,8 @@ static void __attribute__((noinline)) test_measure(bool use_simd, std::size_t ti
 
 static void __attribute__((noinline)) do_measure(std::size_t times)
 {
+    test::benchmark(std::function{test_measure}, false, times); //warmup
+
     auto t1 = test::benchmark(std::function{test_measure}, true, times);
     auto t2 = test::benchmark(std::function{test_measure}, false, times);
     printf("VEC: %lu SCALAR: %lu times: %lu\n", t1.count(), t2.count(), times);

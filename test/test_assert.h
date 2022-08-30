@@ -63,6 +63,9 @@ bool check_cpu_simd_support() {
     #ifdef __AVX512DQ__
     if (!__builtin_cpu_supports("avx512dq")) { fprintf(stderr, "CPU does not support avx512dq\n"); return false; }
     #endif
+    #ifdef __AVX512IFMA__
+    if (!__builtin_cpu_supports("avx512ifma")) { fprintf(stderr, "CPU does not support avx512ifma\n"); return false; }
+    #endif
     return true;
 }
 #else

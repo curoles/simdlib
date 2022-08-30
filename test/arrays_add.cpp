@@ -42,12 +42,34 @@ static bool test2_mul()
     return true;
 }
 
+static bool test3_madd()
+{
+    static const std::size_t SIZE = 8*5 + 5;
+
+    simd::std_array<uint64_t, SIZE> array;
+
+    for (std::size_t i = 0; i < SIZE; ++i) {
+        array[i] = i;
+    }
+
+    simd::std_array<uint64_t, SIZE> res;
+    simd::arrays_madd<uint64_t>(res, array, array, array);
+
+    for (std::size_t i = 0; i < SIZE; ++i) {
+        ASSERT(res[i] == (array[i] * array[i] + array[i]),
+        "fail %lx vs %lx", res[i], (array[i] * array[i] + array[i]));
+    }
+
+    return true;
+}
+
 int main(/*int argc, char** argv*/)
 {
     ASSERT(test::check_cpu_simd_support(), "CPU does not have required SIMD support");
 
     ASSERT(test1_add(), "test1_add failed");
     ASSERT(test2_mul(), "test2_mul failed");
+    ASSERT(test3_madd(), "test3_madd failed");
 
     return 0;
 }

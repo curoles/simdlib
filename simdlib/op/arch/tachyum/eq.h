@@ -15,11 +15,19 @@ template<typename VT>
 simd::PMask<VT> eq_mask(VT a, VT b)
 {
     __mask_t mask;
+#if 0
     asm("veq %[pd], p0, %[a], %[b]"
             : [pd] "=Yp" (mask)
             : [a] "x" (a)
             , [b] "x" (b)
             :);
+#else
+    asm("veq %0, p0, %v1, %v2"
+            : "=Yp" (mask)
+            : "x" (a)
+            , "x" (b)
+            :);
+#endif
     return simd::PMask<VT>{mask};
 }
 

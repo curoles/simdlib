@@ -26,7 +26,7 @@ array_find_first(const T val, const T* array, std::size_t nr_elem)
         }
 #else
         simd::PMask<VT> found = simd::op::eq_mask(v, vv);
-        for (int i=0; i < 16; ++i) printf("%d %u\n", i, (uint8_t)found.mask_[i]);
+        //for (int i=0; i < 16; ++i) printf("%d %u\n", i, (uint8_t)found.mask_[i]);
         //uint64_t bits = mov_p2r(tvx::pmask_t src);
         //if (bits) {
         //    ? = __builtin_ctz(bits);

@@ -1,5 +1,5 @@
 if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
-    set(TEST_CC_FLAGS -static -O3 -mavx512f -mavx512dq) #-mavx512bf16
+    set(TEST_CC_FLAGS -static -O3 -mavx512f -mavx512dq -mavx512ifma) #-mavx512bf16
 else()
     set(TEST_CC_FLAGS -static -O3)
 endif()

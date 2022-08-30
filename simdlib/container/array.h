@@ -45,3 +45,5 @@ struct array_info
 #include "array/array_find_max.h"
 #include "array/arrays_bop.h"
 #include "array/arrays_add.h"
+#include "array/arrays_top.h"
+#include "array/arrays_madd.h"
