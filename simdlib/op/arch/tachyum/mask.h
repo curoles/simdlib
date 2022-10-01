@@ -25,7 +25,7 @@ public:
 
     static inline PMask make_set_first_n(unsigned int n) {
         PMask m;
-        return m.set_first_n(n * 8/*FIXME calculate shift based on VLEN*/);
+        return m.set_first_n(n * sizeof(typename simd::value_type<VT>::type));
     }
 
 #if 0
